@@ -22,11 +22,27 @@
             color: #fff;
             padding: 10px;
             border-radius: 8px 8px 0 0;
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
         }
         .header span {
-            margin: 0 15px;
             font-size: 1.2rem;
+        }
+        .restart-btn {
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+        }
+        .restart-btn:hover {
+            background-color: #e64a19;
         }
         .game-board {
             display: grid;
@@ -71,11 +87,12 @@
     <div class="container game-container">
         <div class="header">
             <span>Hit: <strong id="hitval">0</strong></span>
-            <span>Timer: <strong id="timervalue">600</strong></span>
+            <span>Timer: <strong id="timervalue">80</strong></span>
             <span>Score: <strong id="scoreval">0</strong></span>
+            <button class="restart-btn" id="restartBtn">Restart Game</button>
         </div>
         <div id="pbtm" class="game-board">
-            <!-- Bubbles will be dynamically generated here -->
+           
         </div>
     </div>
 
@@ -116,6 +133,7 @@
                             <div class="final-score">Your Score: ${score}</div>
                         </div>
                     `;
+                    document.querySelector("#restartBtn").style.display = 'inline-block'; // Show the Restart button
                 }
             }, 1000);
         }
@@ -129,6 +147,11 @@
                     getNewHit();
                 }
             });
+
+        
+        document.querySelector("#restartBtn").addEventListener('click', function() {
+            location.reload();  
+        });
 
         runTimer();
         makeBubble();

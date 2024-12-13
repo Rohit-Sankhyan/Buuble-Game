@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Game Board</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #a9d8d3;
+        }
+        .game-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #009688;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .header span {
+            margin: 0 15px;
+            font-size: 1.2rem;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .bubble {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #009688;
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .game-over-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100vh;
+        }
+        .game-over {
+            color: red;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .final-score {
+            color: #009688;
+            font-size: 2rem;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container game-container">
+        <div class="header">
+            <span>Hit: <strong id="hitval">0</strong></span>
+            <span>Timer: <strong id="timervalue">600</strong></span>
+            <span>Score: <strong id="scoreval">0</strong></span>
+        </div>
+        <div id="pbtm" class="game-board">
+            <!-- Bubbles will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        var timer = 80;
+        var score = 0;
+        var hitrn;
+
+        function increaseScore() {
+            score += 10;
+            document.querySelector("#scoreval").textContent = score;
+        }
+
+        function getNewHit() {
+            hitrn = Math.floor(Math.random() * 10);
+            document.querySelector("#hitval").textContent = hitrn;
+        }
+
+        function makeBubble() {
+            var clutter = "";
+            for (var i = 1; i < 210; i++) {
+                var rn = Math.floor(Math.random() * 10);
+                clutter += `<div class="bubble">${rn}</div>`;
+            }
+            document.querySelector('#pbtm').innerHTML = clutter;
+        }
+
+        function runTimer() {
+            var timerinterval = setInterval(function () {
+                if (timer > 0) {
+                    timer--;
+                    document.querySelector("#timervalue").textContent = timer;
+                } else {
+                    clearInterval(timerinterval);
+                    document.querySelector("#pbtm").innerHTML = `
+                        <div class="game-over-container">
+                            <div class="game-over">Game Over</div>
+                            <div class="final-score">Your Score: ${score}</div>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        }
+
+        document.querySelector("#pbtm")
+            .addEventListener('click', function (details) {
+                var clickednum = Number(details.target.textContent);
+                if (clickednum === hitrn) {
+                    increaseScore();
+                    makeBubble();
+                    getNewHit();
+                }
+            });
+
+        runTimer();
+        makeBubble();
+        getNewHit();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
